@@ -1,0 +1,11 @@
+---
+nginx_user: www-data
+nginx_group: www-data
+nginx_listen_port: 80
+nginx_sites: []
+
+nginx_packages:
+  - nginx
+
+nginx_service_state: started
+nginx_service_enabled: true
