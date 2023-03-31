@@ -1,0 +1,31 @@
+server {
+    listen {{ nginx_listen_port }} default_server;
+    listen [::]:{{ nginx_listen_port }} default_server;
+
+    root {{ nginx_server_root }};
+    index {{ nginx_index_file }};
+
+    server_name {{ nginx_server_name }};
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # SSL configuration
+    #
+    # listen 443 ssl default_server;
+    # listen [::]:443 ssl default_server;
+    #
+    # include snippets/self-signed.conf;
+    # include snippets/ssl-params.conf;
+
+    error_page 404 /404.html;
+    location = /40x.html {
+        internal;
+    }
+
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        internal;
+    }
+}
