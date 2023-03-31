@@ -1,0 +1,25 @@
+---
+- name: Install Nginx
+  apt:
+    name: "{{ nginx_packages }}"
+    state: present
+  become: true
+  tags: ['nginx']
+
+- name: Copy Nginx configuration
+  template:
+    src: "{{ nginx_template_file }}"
+    dest: "/etc/nginx/sites-available/default"
+    mode: 0644
+  notify: restart nginx
+  become: true
+  tags: ['nginx']
+
+- name: Enable Nginx site
+  file:
+    src: "/etc/nginx/sites-available/default"
+    dest: "/etc/nginx/sites-enabled/default"
+    state: link
+  notify: restart nginx
+  become: true
+  tags: ['nginx']
