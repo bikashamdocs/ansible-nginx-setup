@@ -29,21 +29,18 @@ git clone https://github.com/bikashamdocs/Ansible_Repo_Final.git
 ```
 2. Change directory to the cloned repository:
 
-```bash
-cd my-playbook
-```
 
 3. Modify the inventory file prod_host.ini or dev_host.ini to specify the target host or group of hosts to install Nginx on.
 
 4. Run the playbook to install Nginx:
 
 ```bash
-ansible-playbook -i inventory/prod_host.ini site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
+ansible-playbook -i inventory/prod_host.ini ./my-playbook/site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
 ```
 or
 
 ```bash
-ansible-playbook -i inventory/dev_host.ini site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
+ansible-playbook -i inventory/dev_host.ini ./my-playbook/site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
 ```
 
 # Using Key-Based Authentication with Ansible:
