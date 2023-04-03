@@ -38,12 +38,12 @@ cd my-playbook
 4. Run the playbook to install Nginx:
 
 ```bash
-ansible-playbook -i inventory/prod_host.ini site.yml --extra-vars "@group_vars/your-environment/all.yml"
+ansible-playbook -i inventory/prod_host.ini site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
 ```
 or
 
 ```bash
-ansible-playbook -i inventory/dev_host.ini site.yml --extra-vars "@group_vars/your-environment/all.yml"
+ansible-playbook -i inventory/dev_host.ini site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
 ```
 
 # Using Key-Based Authentication with Ansible:
