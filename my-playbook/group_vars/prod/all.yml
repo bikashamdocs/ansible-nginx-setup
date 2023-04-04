@@ -1,0 +1,9 @@
+# my-playbook/group_vars/production.yml
+
+nginx_user: www-data
+nginx_group: www-data
+nginx_listen_port: 80
+nginx_server_name: "localhost"
+nginx_server_root: "/var/www/html"
+nginx_index_file: "index.html"
+nginx_template_file: "nginx.conf.j2"

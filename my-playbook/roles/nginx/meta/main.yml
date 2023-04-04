@@ -1,0 +1,7 @@
+galaxy_info:
+  author: Bikash
+  description: Role to install and configure Nginx
+  license: NA
+  min_ansible_version: 2.10
+  platforms:
+    - name: Ubuntu
