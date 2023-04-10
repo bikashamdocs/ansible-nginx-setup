@@ -1,5 +1,5 @@
-# Ansible Playbook: Install Nginx on Ubuntu Local & Remote Machine
-This Ansible playbook installs and configures Nginx on an Ubuntu local & Remote Machine.
+# Ansible Playbook: Install and configure software on Ubuntu Local & Remote Machine
+This Ansible playbook installs and configures software on an Ubuntu local & Remote Machine.
 
 # Project Structure
 
@@ -10,12 +10,10 @@ This Ansible playbook installs and configures Nginx on an Ubuntu local & Remote 
 5. `group_vars` directory to store environment-specific variable values for your inventory groups. This can be useful for defining variables that are specific to certain environments, such as development, staging, and production.
 
 
-
-
 # Requirements
 1. Ansible 2.10 or later
 2. Ubuntu operating system (tested on Ubuntu 20.04)
-3. Role Variables- You can modify these Role variables in the vars/main.yml file to customize the Nginx installation.
+3. Role Variables- You can modify these Role variables in the vars/main.yml file to customize the Software installation.
 
 # Dependencies
 NA
@@ -25,22 +23,21 @@ NA
 1. Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/bikashamdocs/Ansible_Repo_Final.git
+git clone https://github.com/bikashamdocs/ansible-setup.git
 ```
-2. Change directory to the cloned repository:
+
+2. Modify the inventory file prod_host.ini or dev_host.ini to specify the target host or group of hosts to install required software.
 
 
-3. Modify the inventory file prod_host.ini or dev_host.ini to specify the target host or group of hosts to install Nginx on.
-
-4. Run the playbook to install Nginx:
+3. Run the playbook to install Nginx and kubernetes:
 
 ```bash
-ansible-playbook -i inventory/prod_host.ini ./my-playbook/site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
+ansible-playbook -i /path/to/my-playbook/inventory/<your-environment>_host.ini /path/to/my-playbook/nginx.yml --extra-vars "/path/to/my-playbook/@group_vars/<your-environment>/all.yml"
 ```
-or
 
 ```bash
-ansible-playbook -i inventory/dev_host.ini ./my-playbook/site.yml --extra-vars "@group_vars/<your-environment>/all.yml"
+ansible-playbook -i /path/to/my-playbook/inventory/dev_host.ini /path/to/my-playbook/kubernetes.yml --extra-vars "/path/to/my-playbook/@group_vars/your-environment/all.yml"
+
 ```
 
 # Using Key-Based Authentication with Ansible:
