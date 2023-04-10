@@ -1,0 +1,11 @@
+- name: Copy join command script to worker node
+  become: true
+  copy:
+    src: /ansible/repo/kubeadm-join-command.sh
+    dest: /tmp/kubeadm-join-command.sh
+    mode: '0777'
+    
+- name: Execute join command script on worker node
+  become: true
+  shell: sh /tmp/kubeadm-join-command.sh
+  become_user: root
