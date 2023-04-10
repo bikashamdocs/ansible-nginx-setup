@@ -36,7 +36,7 @@ ansible-playbook -i /path/to/my-playbook/inventory/<your-environment>_host.ini /
 ```
 
 ```bash
-ansible-playbook -i /path/to/my-playbook/inventory/dev_host.ini /path/to/my-playbook/kubernetes.yml --extra-vars "/path/to/my-playbook/@group_vars/your-environment/all.yml"
+ansible-playbook -i /path/to/my-playbook/inventory/<your-environment>_host.ini /path/to/my-playbook/kubernetes.yml --extra-vars "/path/to/my-playbook/@group_vars/your-environment/all.yml"
 
 ```
 
