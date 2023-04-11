@@ -15,8 +15,9 @@
   command: kubeadm init
   register: kubeadm_output
 
-- name: Extract token and cert hash from kubeadm output
+- name: Extract IP Address,token and cert hash from kubeadm output
   set_fact:
+    master_address: "{{ kubeadm_output.stdout_lines | grep('kubeadm join') | last | regex_search('\\d+\\.\\d+\\.\\d+\\.\\d+:\\d+') }}"
     token: "{{ kubeadm_output.stdout_lines[-2].split()[-2] }}"
     cert_hash: "{{ kubeadm_output.stdout_lines[-1].split()[-1] }}"
     
@@ -26,5 +27,5 @@
     dest: /ansible/repo/kubeadm-join-command.sh
     content: |
       #!/bin/bash
-      kubeadm join {{ master_ip }}:6443 --token {{ token }} --discovery-token-ca-cert-hash {{ cert_hash }}
+      kubeadm join {{ master_address }} --token {{ token }} --discovery-token-ca-cert-hash {{ cert_hash }}
   
