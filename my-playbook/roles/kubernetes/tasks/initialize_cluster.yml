@@ -17,6 +17,7 @@
 
 - name: Extract token and cert hash from kubeadm output
   set_fact:
+    master_address: "{{ kubeadm_output.stdout_lines[-2].split()[-4] }}"
     token: "{{ kubeadm_output.stdout_lines[-2].split()[-2] }}"
     cert_hash: "{{ kubeadm_output.stdout_lines[-1].split()[-1] }}"
     
@@ -26,5 +27,5 @@
     dest: /ansible/repo/kubeadm-join-command.sh
     content: |
       #!/bin/bash
-      kubeadm join {{ master_ip }}:6443 --token {{ token }} --discovery-token-ca-cert-hash {{ cert_hash }}
+      kubeadm join {{ master_address }}:6443 --token {{ token }} --discovery-token-ca-cert-hash {{ cert_hash }}
   
