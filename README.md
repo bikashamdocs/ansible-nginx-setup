@@ -3,11 +3,13 @@ This Ansible playbook installs and configures software on an Ubuntu local & Remo
 
 # Project Structure
 
-1. `ansible.cfg` is the configuration file for Ansible. It contains settings such as the location of the inventory file and SSH options.
+1. `ansible.cfg` is the configuration file for Ansible. It contains settings such as the location of the inventory file,private key,role path, extra variable etc.
 2. `inventory/host.ini` is the inventory file that defines the hosts that Ansible will manage. It lists the IP addresses or domain names of the hosts and groups them into categories.
 3. `roles/` is a directory that contains all the roles for the Ansible project. In this project, there's only one role named nginx.
 4. `site.yml` is the main playbook that will be executed for the entire Ansible project. It includes the nginx role.
 5. `group_vars` directory to store environment-specific variable values for your inventory groups. This can be useful for defining variables that are specific to certain environments, such as development, staging, and production.
+
+# Ansible Configuration File
 
 
 # Requirements
@@ -32,11 +34,11 @@ git clone https://github.com/bikashamdocs/ansible-setup.git
 3. Run the playbook to install Nginx and kubernetes:
 
 ```bash
-ansible-playbook -i /path/to/my-playbook/inventory/<your-environment>_host.ini /path/to/my-playbook/nginx.yml --extra-vars "/path/to/my-playbook/@group_vars/<your-environment>/all.yml"
+ansible-playbook ./my-playbook/nginx.yml
 ```
 
 ```bash
-ansible-playbook -i /path/to/my-playbook/inventory/<your-environment>_host.ini /path/to/my-playbook/kubernetes.yml --extra-vars "/path/to/my-playbook/@group_vars/your-environment/all.yml"
+ansible-playbook ./my-playbook/kubernetes.yml 
 
 ```
 
