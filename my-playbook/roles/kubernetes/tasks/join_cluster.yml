@@ -1,10 +1,17 @@
+- name: Fetch join command script from master node
+  fetch:
+    src: /ansible/repo/kubeadm-join-command.sh
+    dest: /tmp/kubeadm-join-command.sh
+    flat: yes
+  delegate_to: master1
+
 - name: Copy join command script to worker node
   become: true
   copy:
-    src: /ansible/repo/kubeadm-join-command.sh
+    src: /tmp/kubeadm-join-command.sh
     dest: /tmp/kubeadm-join-command.sh
     mode: '0777'
-    
+
 - name: Execute join command script on worker node
   become: true
   shell: sh /tmp/kubeadm-join-command.sh
