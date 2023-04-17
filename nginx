@@ -1,6 +1,6 @@
 ---
 - name: Install Nginx
-  hosts: localhost
+  hosts: all
   become: yes
   
   roles:
