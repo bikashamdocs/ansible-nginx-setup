@@ -34,13 +34,10 @@ git clone https://github.com/bikashamdocs/ansible-setup.git
 3. Run the playbook to install Nginx and kubernetes:
 
 ```bash
-ansible-playbook ./my-playbook/nginx.yml
-```
-
-```bash
-ansible-playbook ./my-playbook/kubernetes.yml 
+ansible-playbook nginx kubernetes
 
 ```
+
 
 # Using Key-Based Authentication with Ansible:
 
