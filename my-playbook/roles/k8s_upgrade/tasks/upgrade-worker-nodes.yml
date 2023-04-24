@@ -1,0 +1,53 @@
+---
+- name: Update package cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Unhold kubelet, kubectl and kubeadm
+  become: true
+  shell: apt-mark unhold kubelet kubectl kubeadm
+
+- name: Install kubeadm with version {{ k8s_version }}
+  apt:
+    name: kubeadm={{ k8s_version }}-00
+    state: present
+    update_cache: yes
+
+- name: Upgrade worker node
+  become_user: root
+  command: kubeadm upgrade node
+
+- name: Get node name
+  shell: kubectl get node -o jsonpath='{.items[{{ groups['workers'].index(inventory_hostname) + 1 }}].metadata.name}'
+  delegate_to: "{{ groups['masters'][0] }}"
+  register: worker_node_name
+- name: Store node name in variable
+  set_fact:
+    worker_node_name: "{{ worker_node_name.stdout }}"
+
+- name: Drain the node
+  command: kubectl drain {{ worker_node_name }} --ignore-daemonsets
+  delegate_to: "{{ groups['masters'][0] }}"
+
+- name: Install kubelet and kubectl with version {{ k8s_version }}
+  apt:
+    name:
+      - kubelet={{ k8s_version }}-00
+      - kubectl={{ k8s_version }}-00
+    state: present
+    update_cache: yes
+
+- name: Restart kubelet
+  systemd:
+    name: kubelet
+    state: restarted
+    daemon_reload: yes
+
+- name: Pause for 10 seconds
+  pause:
+    seconds: 10
+
+- name: Uncordon the node
+  command: kubectl uncordon {{ worker_node_name }}
+  delegate_to: "{{ groups['masters'][0] }}"
