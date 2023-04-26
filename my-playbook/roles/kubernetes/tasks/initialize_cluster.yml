@@ -27,5 +27,5 @@
     dest: /ansible/repo/kubeadm-join-command.sh
     content: |
       #!/bin/bash
-      kubeadm join {{ master_address }}:6443 --token {{ token }} --discovery-token-ca-cert-hash {{ cert_hash }}
+      kubeadm join {{ master_address }} --token {{ token }} --discovery-token-ca-cert-hash {{ cert_hash }}
   
