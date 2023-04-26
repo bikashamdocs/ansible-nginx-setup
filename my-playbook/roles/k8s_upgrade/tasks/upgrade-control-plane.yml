@@ -1,0 +1,55 @@
+---
+- name: Update package cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Unhold kubelet, kubectl and kubeadm
+  become: true
+  shell: apt-mark unhold kubelet kubectl kubeadm
+
+- name: Install kubeadm with version {{ k8s_version }}
+  apt:
+    name: kubeadm={{ k8s_version }}-00
+    state: present
+    update_cache: yes
+
+- name: Verify kubeadm version
+  command: kubeadm version
+  register: kubeadm_version_output
+
+- name: Upgrade Kubernetes version
+  command: kubeadm upgrade apply v{{ k8s_version }} -y
+
+- name: Get node name
+  shell: kubectl get node -o jsonpath='{.items[0].metadata.name}'
+  register: master_node_name
+- name: Store node name in variable
+  set_fact:
+    master_node_name: "{{ master_node_name.stdout }}"
+
+- name: Drain control plane node
+  command: kubectl drain {{ master_node_name }} --ignore-daemonsets
+  changed_when: false
+
+- name: Install kubelet and kubectl with version {{ k8s_version }}
+  apt:
+    name:
+      - kubelet={{ k8s_version }}-00
+      - kubectl={{ k8s_version }}-00
+    state: present
+    update_cache: yes
+
+- name: Restart kubelet
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: restarted
+
+- name: Pause for 15 seconds
+  pause:
+    seconds: 15
+
+- name: Uncordon control plane node
+  command: kubectl uncordon {{ master_node_name }}
+  changed_when: false

@@ -1,0 +1,7 @@
+---
+# This is the main task file that will be executed by Ansible when the role is run
+
+- include_tasks: upgrade-control-plane.yml
+  when: inventory_hostname == groups['masters'][0]
+- include_tasks: upgrade-worker-nodes.yml
+  when: inventory_hostname in groups['workers']

@@ -1,6 +1,42 @@
----
-- hosts: masters,workers
+- name: Install k8s
+  hosts: masters,workers
   become: true
-  gather_facts: true
-  roles:
-    - kubernetes
+  vars_files:
+    - ./my-playbook/group_vars/dev/all.yml
+  tasks:
+    - name: Check kubeadm version
+      command: kubeadm version
+      register: kubeadm_version_output
+      ignore_errors: yes
+
+    - name: Determine k8s installation status
+      set_fact:
+        k8s_installed: "{{ kubeadm_version_output.rc == 0 }}"
+      run_once: true
+
+    - name: Install or upgrade k8s
+      include_role:
+        name: kubernetes
+      when: not k8s_installed
+- name: upgrade k8s
+  hosts: masters,workers
+  become: true
+  vars_files:
+    - ./my-playbook/group_vars/dev/all.yml
+  serial: 1
+  tasks:
+    - name: Fetch kubeadm version
+      shell: kubeadm version | grep -oP '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1
+      register: kubeadm_version_output
+
+    - name: Set fact for kubeadm version
+      set_fact:
+        kubeadm_version: "{{ kubeadm_version_output.stdout }}"
+    - debug:
+        msg: "current version is {{ kubeadm_version }} and required version is {{ k8s_version }}"
+
+
+    - name: Upgrade k8s
+      include_role:
+        name: k8s_upgrade
+      when: kubeadm_version is version(k8s_version, '<')
