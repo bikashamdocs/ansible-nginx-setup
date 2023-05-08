@@ -1,0 +1,9 @@
+---
+# default var file for mysql
+# Please replace demo-user with your actual username.
+db_user: demo-user
+# Please replace pasword123 with your actual db password.
+db_pass: password123
+# Please replace demo-db with your actual db name.
+db_name: demo-db
+mysql_version: 8.0
