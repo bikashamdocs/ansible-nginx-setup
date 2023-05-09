@@ -1,0 +1,6 @@
+---
+- name: Install Nginx
+  hosts: remote_host
+  become: yes
+  roles:
+    - mysql
