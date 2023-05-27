@@ -1,0 +1,39 @@
+# tasks file for MySQL
+
+# Install MySQL and its dependencies
+- name: Installing MySQL and dependencies with {{ mysql_version }}
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - mysql-server-{{ mysql_version }}
+    - mysql-client-{{ mysql_version }}
+    - python3-mysqldb
+    - libmysqlclient-dev
+  become: yes
+
+# Start and enable MySQL service
+- name: Start and enable MySQL service
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+# Create MySQL user with all privileges
+- name: Create MySQL user
+  no_log: true
+  mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_pass }}"
+    priv: '*.*:ALL'
+    host: '%'
+    state: present
+
+# Create a MySQL database
+- name: Create MySQL database
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+  notify:
+    - Restart MySQL
