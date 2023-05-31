@@ -1,0 +1,43 @@
+---
+- name: Update all packages on the NFS server
+  apt:
+    update_cache: yes
+    upgrade: yes
+
+- name: Install the nfs-kernel-server package on the server
+  apt:
+    name: nfs-kernel-server
+    state: present
+
+- name: Allow port 2049 to accept traffic from the client's IP address
+  ufw:
+    rule: allow
+    from_ip: "{{ client_ip_addr }}"
+    port: nfs
+  notify: restart nfs
+
+- name: Create a directory on the NFS server to contain the shared files
+  file:
+    path: "{{ nfs_export_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Change the directory ownership to nobody:nogroup
+  file:
+    path: "{{ nfs_export_dir }}"
+    owner: nobody
+    group: nogroup
+
+- name: Adjust the file permissions for the directory
+  file:
+    path: "{{ nfs_export_dir }}"
+    mode: '0777'
+
+- name: Add the new export directory to NFS
+  lineinfile:
+    path: /etc/exports
+    line: "{{ nfs_export_dir }} {{ client_ip_addr }}(rw,sync,no_subtree_check)"
+    state: present
+  notify: restart nfs
