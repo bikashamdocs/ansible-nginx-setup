@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+
+nfs_export_dir: /nfs/share/project
+client_ip_addr: 52.91.199.176

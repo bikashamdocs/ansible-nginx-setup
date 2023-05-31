@@ -1,0 +1,7 @@
+---
+- name: Setup nfs server
+  hosts: remote_host
+  become: yes
+  
+  roles:
+    - nfs_server
